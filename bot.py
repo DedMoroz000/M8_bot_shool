@@ -22,12 +22,32 @@ level1 = [
         "options": ["слитно", "раздельно", "не знаю"],
         "answer": 1
     },
+    {
+        "q": "сколько океанов на Земле",
+        "options": ["4", "5", "6"],
+        "answer": 1
+    },
+    {
+        "q": "сколько стран в Европе",
+        "options": ["45", "50", "40"],
+        "answer": 0
+    },
 ]
 level2 = [
     {
-        "q": "Сколько будет 80 * на 10",
+        "q": "Сколько будет 80 * 10 : 2",
         "options": ["100", "50", "400", "160", "800", "1600"],
-        "answer": 4
+        "answer": 2
+    },
+    {
+        "q": "Кто победил во второй мировой войне",
+        "options": ["СССР", "Великобритания", "США", "Германия", "Польша", "Япония"],
+        "answer": 0
+    },
+    {
+        "q": "сколько часовых в России",
+        "options": ["10", "7", "14", "11", "9", "5"],
+        "answer": 3
     },
 ]
 
@@ -177,7 +197,6 @@ def show_schedule(message):
     bot.reply_to(message, f" Текущее расписание:\n\n{schedule[0]}")
 
 @bot.message_handler(commands=['quiz'])
-@bot.message_handler(commands=['wik'])
 def wik(message):
     user_data[message.chat.id] = {"q": 0, "score": 0}
     send_question(message.chat.id)
@@ -198,8 +217,12 @@ def send_question(chat_id):
 @bot.callback_query_handler(func=lambda call: True)
 def answer(call):
     chat_id = call.message.chat.id
+        
     user_answer = int(call.data)
 
+    chat_id = str(chat_id)
+
+    print(chat_id)
     q_index = user_data[chat_id]["q"]
     if user_answer == quiz[q_index]["answer"]:
         user_data[chat_id]["score"] += 1
@@ -217,5 +240,4 @@ def answer(call):
         send_question(chat_id)
 
 if __name__=="__main__":
-    bot.polling()
     bot.polling()
